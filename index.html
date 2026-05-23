@@ -721,7 +721,7 @@
         <div class="unlock-box">
           <div class="lock-icon">🔒</div>
           <h3>Unlock Your Full Report</h3>
-          <p>Get the <strong>exact price range</strong>, condition breakdown, best platform to sell, AI analysis, and tips — for just <strong>$0.99</strong>.</p>
+          <p>See the <strong>exact price range</strong>, which platform pays you the most, condition score, AI analysis, and tips to sell faster — for just <strong>$0.99</strong>.</p>
           <div class="unlock-row">
             <input class="code-input" id="codeInput" type="text" placeholder="Enter your access code" maxlength="20">
             <button class="btn-unlock" onclick="tryUnlock()">Unlock</button>
@@ -872,8 +872,6 @@ Respond ONLY with valid JSON (no markdown, no backticks):
   "condition": "Excellent/Good/Fair/Poor",
   "conditionScore": 8,
   "conditionNotes": "brief note on what you see",
-  "teaserMin": 150,
-  "teaserMax": 400,
   "exactMin": 240,
   "exactMax": 290,
   "platforms": [
@@ -945,9 +943,12 @@ Respond ONLY with valid JSON (no markdown, no backticks):
 }
 
 function displayTeaser(r) {
-  // Wide vague range for teaser
-  document.getElementById('priceRange').textContent = `$${r.teaserMin}–$${r.teaserMax}`;
-  document.getElementById('priceSub').textContent = `Unlock for $0.99 to see the exact range, condition breakdown, and where to sell`;
+  // Always show intentionally wide/vague range — not the exact one
+  const teaserMin = Math.max(50, r.exactMin - Math.floor(Math.random() * 60 + 80));
+  const teaserMax = r.exactMax + Math.floor(Math.random() * 60 + 80);
+  document.getElementById('priceRange').textContent = `$${teaserMin}–$${teaserMax}`;
+  document.getElementById('priceSub').textContent =
+    `Unlock for $0.99 to see the exact price, which platform pays most, and tips to sell faster`;
   document.getElementById('results').classList.add('visible');
   document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
