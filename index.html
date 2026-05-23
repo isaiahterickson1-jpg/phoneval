@@ -746,24 +746,7 @@
   </div>
 
   <!-- API Key Setup -->
-  <div class="api-setup">
-    <div class="api-setup-header">
-      <h3>🔑 OpenRouter API Key</h3>
-      <span class="badge badge-green">FREE</span>
-      <span class="badge badge-purple">AI Vision</span>
-    </div>
-    <div class="api-row">
-      <input class="api-input" type="password" id="apiKey" placeholder="sk-or-v1-xxxxxxxxxxxxxxxx" autocomplete="off">
-      <button class="btn-save" onclick="saveKey()">SAVE</button>
-    </div>
-    <div class="key-status">
-      <div class="dot" id="keyDot"></div>
-      <span id="keyStatusText" style="color:var(--muted)">No key saved — get one free below</span>
-    </div>
-    <p class="api-note">
-      Free key from <a href="https://openrouter.ai" target="_blank">openrouter.ai</a> — sign up, go to Keys, create a free key. No credit card needed for free models. Key is stored locally in your browser only.
-    </p>
-  </div>
+
 
   <!-- Scan Section -->
   <div class="scan-section">
@@ -928,39 +911,15 @@ let imageBase64 = null;
 let imageType = null;
 
 // ── Key management ──
-function saveKey() {
-  const key = document.getElementById('apiKey').value.trim();
-  if (!key) return alert('Please enter your API key');
-  localStorage.setItem('or_api_key', key);
-  updateKeyStatus(true);
-  checkAnalyzeReady();
-}
 
-function updateKeyStatus(has) {
-  const dot = document.getElementById('keyDot');
-  const text = document.getElementById('keyStatusText');
-  if (has) {
-    dot.classList.add('active');
-    text.textContent = 'API key saved ✓';
-    text.style.color = 'var(--accent)';
-  } else {
-    dot.classList.remove('active');
-    text.textContent = 'No key saved — get one free below';
-    text.style.color = 'var(--muted)';
-  }
-}
 
 function getKey() {
-  return localStorage.getItem('or_api_key') || '';
+  return localStorage.getItem('or_api_key') || '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';
 }
 
 // Init
 window.addEventListener('load', () => {
-  const saved = getKey();
-  if (saved) {
-    document.getElementById('apiKey').value = saved;
-    updateKeyStatus(true);
-  }
+  checkAnalyzeReady();
 });
 
 // ── File handling ──
@@ -1008,14 +967,9 @@ zone.addEventListener('drop', e => {
 function checkAnalyzeReady() {
   const btn = document.getElementById('analyzeBtn');
   const txt = document.getElementById('btnText');
-  const hasKey = !!getKey();
-  const hasImg = !!imageBase64;
-  if (!hasImg) {
+  if (!imageBase64) {
     btn.disabled = true;
     txt.textContent = '📷 Upload a photo to start';
-  } else if (!hasKey) {
-    btn.disabled = true;
-    txt.textContent = '🔑 Add your API key above first';
   } else {
     btn.disabled = false;
     txt.textContent = '🔍 Analyze My Phone';
